@@ -3,7 +3,7 @@ export default `
   type Query {
     categories: [Category!],
     locations(categoryId: Int): [Category!],
-    users: [User],
+    users: [User!],
     students: [Student],
     faculty: [Faculty],
     currentUser: User,

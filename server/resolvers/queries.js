@@ -13,5 +13,11 @@ export default {
         }
       ]
     });
-  }
+  },
+
+  users: (parent, args, { db }, info) => {
+    return db.User.findAll();
+  },
+
+  
 };

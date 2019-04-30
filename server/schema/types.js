@@ -3,7 +3,7 @@ export default `
     id: ID
     name: String
   }
-  
+
   # extra credit: monitor when assignments are add
   type Subscription {
     assignmentAdded(studentID: ID!): Assignment
@@ -33,6 +33,8 @@ export default `
     name: String!
     email: String!
     role: Role!
+    password: String
+    salt: String
   }
 
   type Student implements User {
@@ -43,6 +45,8 @@ export default `
     courses: [Course]
     assignments: [Assignment]
     gpa: Float!
+    password: String
+    salt: String
   }
 
   type Faculty implements User {
@@ -51,6 +55,8 @@ export default `
     email: String!
     role: Role!
     courses: [Course]
+    password: String
+    salt: String
   }
 
   type Admin implements User {
@@ -58,6 +64,8 @@ export default `
     name: String!
     email: String!
     role: Role!
+    password: String
+    salt: String
   }
 
   type Course {
