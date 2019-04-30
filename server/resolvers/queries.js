@@ -19,5 +19,27 @@ export default {
     return db.User.findAll();
   },
 
-  
+  students: (parent, args, { db }, info) => {
+    return db.User.findAll({
+      where: {
+        role: 'Student'
+      },
+      // include: [
+      //   {
+      //     model: db.Course,
+      //     through: {attributes: []}
+      //     // where: { id: args.id }
+      //   }
+      // ]
+    })
+  },
+
+  faculty: (parent, args, { db }, info) => {
+    return db.User.findAll({
+      where: {
+        role: 'Faculty'
+      }
+    })
+  }
+
 };
