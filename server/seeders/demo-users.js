@@ -1,10 +1,42 @@
-'use strict';
+// 'use strict';
+const crypto = require( "crypto");
+
+
+const genRandomString = length => {
+  return crypto
+    .randomBytes(Math.ceil(length / 2))
+    .toString('hex') /** convert to hexadecimal format */
+    .slice(0, length); /** return required number of characters */
+};
+
+const sha512 = (password, salt) => {
+  var hash = crypto.createHmac(
+    'sha512',
+    salt,
+  ); /** Hashing algorithm sha512 */
+  hash.update(password);
+  var value = hash.digest('hex');
+  return {
+    salt: salt,
+    passwordHash: value,
+  };
+};
+
+const genSaltHashPassword = userpassword => {
+  var salt = genRandomString(16); /** Gives us salt of length 16 */
+  var passwordData = sha512(userpassword, salt);
+  console.log('UserPassword = ' + userpassword);
+  console.log('Passwordhash = ' + passwordData.passwordHash);
+  console.log('nSalt = ' + passwordData.salt);
+  return passwordData;
+};
+
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
     const now = new Date();
     return queryInterface.bulkInsert(
-      'Users', 
+      'Users',
       [
         {
           name: 'John',
@@ -12,6 +44,9 @@ module.exports = {
           role: 'Admin',
           createdAt: now,
           updatedAt: now,
+          ...genSaltHashPassword('password'),
+
+
         },
         {
           name: 'Sally',
@@ -20,6 +55,8 @@ module.exports = {
           gpa: 3.67,
           createdAt: now,
           updatedAt: now,
+          ...genSaltHashPassword('password'),
+
         },
         {
           name: 'Erik',
@@ -28,6 +65,8 @@ module.exports = {
           gpa: 2.91,
           createdAt: now,
           updatedAt: now,
+          ...genSaltHashPassword('password'),
+
         },
         {
           name: 'Tom',
@@ -36,6 +75,8 @@ module.exports = {
           gpa: '1.9',
           createdAt: now,
           updatedAt: now,
+          ...genSaltHashPassword('password'),
+
         },
         {
           name: 'Vivian',
@@ -43,6 +84,8 @@ module.exports = {
           role: 'Faculty',
           createdAt: now,
           updatedAt: now,
+          ...genSaltHashPassword('password'),
+
         },
         {
           name: 'Scott',
@@ -50,10 +93,12 @@ module.exports = {
           role: 'Faculty',
           createdAt: now,
           updatedAt: now,
+          ...genSaltHashPassword('password'),
+
         },
       ],
       {},
-      );
+    );
     /*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.

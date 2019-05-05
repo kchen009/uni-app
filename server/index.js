@@ -4,10 +4,15 @@ import schema from "./schema";
 import resolvers from "./resolvers";
 import db from "./models";
 import cors from "cors";
+import {
+  userSessions,
+  users
+} from "./Auth";
+
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
-  context: { db },
+  context: { db, users, userSessions },
   introspection: true,
   playground: true,
 },
