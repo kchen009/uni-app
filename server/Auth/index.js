@@ -78,14 +78,16 @@ class Users {
         // let user;
         let response = await db.User.findOne({ where: { email: emailAddress } });
 
+        // if user not found
         if (!response) {
             throw new AuthenticationError('User not Found');
         }
+
         // return response;
         const user = response.dataValues
+
         // hash the password with the user salt
         const hashedPassword = this.sha512(password, user.salt).passwordHash;
-        console.log('hashp1:', hashedPassword);
 
         // compare the hashed password against the one in the user record
         if (hashedPassword !== user.passwordHash) {
@@ -95,9 +97,8 @@ class Users {
         }
 
         // create a jwt token and store
-        //
-        console.log('user:', _.pick(user, ['id', 'name', 'role', 'email']))
         return {
+            // using loadash pick to select what we want from the user
             user: _.pick(user, ['id', 'name', 'email', 'role']),
             token: userSessions.createSession(user.id, APP_SECRET),
         };
@@ -112,16 +113,22 @@ class Users {
     //     return this.users.filter(u => u.role === 'Student');
     // }
 
-    getStudentByEmail(email) {
-        return this.getStudents().filter(s => s.email === email)[0] || null;
-    }
+    // getStudentByEmail(email) {
+    //     return this.getStudents().filter(s => s.email === email)[0] || null;
+    // }
 
     list() {
         return this.users;
     }
 
-    get(id) {
-        return this.users[id];
+    get = async (id, context) => {
+        try {
+            let user = await context.db.User.findOne({ where: { id: id } })
+            return user.dataValues;
+        } catch (error) {
+            console.log(err);
+            throw new AuthenticationError('Unable to find User in DB');
+        }
     }
 
     create(args) {
@@ -167,13 +174,14 @@ class UserSessions {
 }
 
 
-const getUserForToken = token => {
+const getUserForToken = async (token, context) => {
     try {
         console.log(id, sessionID)
         const { id, sessionID } = jwt.verify(token, APP_SECRET);
         console.log(id, sessionID)
-        const user = users.get(id);
-
+        const user = await users.get(id, context);
+        
+        
         // get the user session
         // note: a better way to do this with a database is to
         // join the Users table with the UserSessions table on
@@ -200,7 +208,7 @@ const getUserForToken = token => {
 
 const makeResolver = (resolver, options) => {
     // return an adorned resolver function
-    return (root, args, context, info) => {
+    return async (root, args, context, info) => {
         const o = {
             requireUser: true,
             roles: ['Admin', 'Student', 'Faculty'],
@@ -208,19 +216,18 @@ const makeResolver = (resolver, options) => {
         };
         const { requireUser } = o;
         const { roles } = o;
-        let user = null;
+        let user = {};
         let sessionID = null;
 
         if (requireUser) {
             // get the token from the request
-            const token = context.req.headers.authorization || '';
+            const token = context.request.req.headers.authorization || '';
             if (!token) {
                 throw new AuthenticationError('Token Required');
             }
 
             // retrieve the user given the token
-            [user, sessionID] = getUserForToken(token);
-            console.log(user);
+            [user, sessionID] = await getUserForToken(token, context);
             if (!user) {
                 throw new AuthenticationError('Invalid Token or User');
             }
