@@ -5,6 +5,7 @@ import {
     gql,
     AuthenticationError,
     ForbiddenError,
+    UserInputError,
 } from 'apollo-server';
 import _ from 'lodash';
 
@@ -49,6 +50,7 @@ class Users {
         return passwordData;
     };
 
+
     login = async (emailAddress, password, { db }) => {
         // does a user with the specified emailAddress exist?
         // let user;
@@ -81,6 +83,20 @@ class Users {
 
     }
 
+    createUser = async (user, db ) => {
+
+        // looks for user
+        let response = await db.User.findOne({ where: { email: user.email } });
+        // throw if user already exists
+        if (response) {
+            throw new UserInputError('User already Exists');
+        }
+        let password = this.genSaltHashPassword(user.password);
+        // return response;
+        return db.User.create({ name: user.name, email: user.email, role: user.role, ...password })
+        
+    }
+
     // getUsers() {
     //     return this.users;
     // }
@@ -107,7 +123,7 @@ class Users {
         }
     }
 
-  
+
 
     update(id, user) {
         const u = this.get({ id });
@@ -140,7 +156,7 @@ class UserSessions {
     }
     // invalidate all sessions from that user
     invalidateSession(sessionID) {
-        this.userSessions = this.userSessions.filter((session)=> {
+        this.userSessions = this.userSessions.filter((session) => {
             return session.id !== sessionID;
         })
     }
@@ -153,8 +169,8 @@ const getUserForToken = async (token, context) => {
         const { id, sessionID } = jwt.verify(token, APP_SECRET);
         console.log(id, sessionID)
         const user = await users.get(id, context);
-        
-        
+
+
         // get the user session
         // note: a better way to do this with a database is to
         // join the Users table with the UserSessions table on
