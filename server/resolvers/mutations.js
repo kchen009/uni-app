@@ -15,15 +15,6 @@ import { makeResolver } from '../Auth';
 //
 
 export default {
-  addCategory: (parent, args, { db }, info) => {
-    return db.Categories.create({
-      name: args.categoryName,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }).then(newCat => {
-      return db.Categories.findAll();
-    });
-  },
   loginUser: makeResolver(
     (root, args, context, info) => {
       return  context.users.login(args.email, args.password, {db: context.db});

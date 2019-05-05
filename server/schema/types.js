@@ -1,8 +1,4 @@
 export default `
-  type Category {
-    id: ID
-    name: String
-  }
 
   # extra credit: monitor when assignments are add
   type Subscription {

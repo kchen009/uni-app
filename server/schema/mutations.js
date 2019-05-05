@@ -1,8 +1,6 @@
 import types from "./types";
 export default `
   type Mutation {
-    addCategory(categoryName: String): [Category!]
-    
     loginUser(email: String!, password: String!): AuthPayload
     logoutUser: Boolean
 
