@@ -11,7 +11,7 @@
     "seed": "node_modules/.bin/sequelize db:seed:all --config ./server/config/config.json --seeders-path ./server/seeders --migrations-path ./server/migrations --models-path ./server/--migrations-path ./server/migrations",
     "unseed": "node_modules/.bin/sequelize db:seed:undo:all --config ./server/config/config.json --seeders-path ./server/seeders --migrations-path ./server/migrations --models-path ./server/--migrations-path ./server/migrations",
     "start": "nodemon --exec babel-node server/index.js",
-    "build": "babel src --out-dir dist --copy-files",
+    "build": "babel server --out-dir dist --copy-files",
     "serve": "node dist/index.js"
   },
   "dependencies": {
