@@ -83,18 +83,42 @@ class Users {
 
     }
 
-    createUser = async (user, db ) => {
+
+    create = async (user, db) => {
 
         // looks for user
         let response = await db.User.findOne({ where: { email: user.email } });
-        // throw if user already exists
+        // throw if email already exists
         if (response) {
-            throw new UserInputError('User already Exists');
+            throw new UserInputError('Email already Exists');
         }
         let password = this.genSaltHashPassword(user.password);
         // return response;
         return db.User.create({ name: user.name, email: user.email, role: user.role, ...password })
-        
+    }
+
+    update = async (id, user, db) => {
+
+        let password = this.genSaltHashPassword(user.password);
+        try {
+
+            let res = await db.User.update(
+                {
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                    ...password
+                },
+                {
+                    returning: true,
+                    where: { id: id }
+                }
+            );
+            return res[1][0].dataValues;
+        } catch (error) {
+            console.log('Error ', error)
+            throw new UserInputError('Unable to find User in DB');
+        }
     }
 
     // getUsers() {
@@ -125,12 +149,7 @@ class Users {
 
 
 
-    update(id, user) {
-        const u = this.get({ id });
 
-        u.name = user.name;
-        return u;
-    }
 }
 
 class UserSessions {

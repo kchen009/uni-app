@@ -30,8 +30,17 @@ export default {
   createUser: makeResolver(
     (root, args, context, info) => {
       let user = args.user;
-      return context.users.createUser(user, context.db)
-      },
+      return context.users.create(user, context.db)
+    },
+    { roles: ['Admin'] }
+  ),
+
+  updateUser: makeResolver(
+    (root, args, context, info) => {
+      let id = args.id;
+      let user = args.user;
+      return context.users.update(id, user, context.db)
+    },
     { roles: ['Admin'] }
   )
 };
