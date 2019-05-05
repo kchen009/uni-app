@@ -12,30 +12,6 @@ const APP_SECRET =
     "App Secret Key; For example only! Don't define one in code!!!";
 class Users {
     constructor() {
-        this.nextID = 3;
-        this.users = [
-            {
-                id: 0,
-                name: 'zero',
-                email: 'zero@example.com',
-                role: 'Admin',
-                ...this.genSaltHashPassword('password'),
-            },
-            {
-                id: 1,
-                name: 'one',
-                email: 'one@example.com',
-                role: 'Student',
-                ...this.genSaltHashPassword('password'),
-            },
-            {
-                id: 2,
-                name: 'prof',
-                email: 'admin@example.com',
-                role: 'Faculty',
-                ...this.genSaltHashPassword('password'),
-            },
-        ];
     }
 
     /**
@@ -131,12 +107,7 @@ class Users {
         }
     }
 
-    create(args) {
-        const u = { name: args.name, id: this.nextID };
-        this.users.push(u);
-        this.nextID++;
-        return u;
-    }
+  
 
     update(id, user) {
         const u = this.get({ id });
@@ -167,9 +138,11 @@ class UserSessions {
         console.log('token', token);
         return token;
     }
-
+    // invalidate all sessions from that user
     invalidateSession(sessionID) {
-        this.userSessions = _.remove(this.userSessions, s => s.id === sessionID);
+        this.userSessions = this.userSessions.filter((session)=> {
+            return session.id !== sessionID;
+        })
     }
 }
 
@@ -218,6 +191,7 @@ const makeResolver = (resolver, options) => {
         const { roles } = o;
         let user = {};
         let sessionID = null;
+        // console.log('session id conte4xt:', context)
 
         if (requireUser) {
             // get the token from the request

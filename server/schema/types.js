@@ -29,7 +29,7 @@ export default `
     name: String!
     email: String!
     role: Role!
-    password: String
+    passwordHash: String
     salt: String
   }
 
@@ -41,7 +41,7 @@ export default `
     courses: [Course]
     assignments: [Assignment]
     gpa: Float!
-    password: String
+    passwordHash: String
     salt: String
   }
 
@@ -51,7 +51,7 @@ export default `
     email: String!
     role: Role!
     courses: [Course]
-    password: String
+    passwordHash: String
     salt: String
   }
 
@@ -60,7 +60,7 @@ export default `
     name: String!
     email: String!
     role: Role!
-    password: String
+    passwordHash: String
     salt: String
   }
 
