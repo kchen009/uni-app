@@ -16,33 +16,50 @@ configure your /server/config/config.json
 
 ```
 query {
-  locations(categoryId:1){
-    name,
+  users {
     id
+    name
+    role
   }
 }
+
 ```
 
 ```
 query {
-  categories{
-    name,
+  students {
     id
-  }
-}
-```
-
-```
-mutation {
-  addCategory(categoryName: "Night life") {
     name
+    courses {
+      id
+      name
+      professor {
+        id
+        name
+      }
+    }
   }
 }
+
 ```
 
 ```
-query{
-  users { id, name, email, role}
+query {
+  faculty {
+    id
+    name
+    courses {
+      id
+      name
+      students {
+        id
+        name
+      }
+    }
+  }
 }
+
 ```
+
+
 #### created with GraphQL, Apollo, Node, Express, Sequelize starter
