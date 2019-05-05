@@ -1,4 +1,4 @@
-# Uni App
+# Uni Server
 
 You must have Postgres running on your machine. I use [Postgres App](https://postgresapp.com/). 
 
