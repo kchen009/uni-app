@@ -21,6 +21,12 @@ module.exports = {
         courseId: 3,
         userId: 3
       },
+      {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        courseId: 3,
+        userId: 4
+      },
       
     ]);
   },

@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function(models) {
     // associations can be defined here
     User.hasMany(models.AuthPayload, {foreignKey: 'userId'})
-    User.hasMany(models.Course, {foreignKey: 'userId'})
     User.belongsToMany(models.Course, {
       through: models.StudentCourse,
       foreignKey: 'userId',

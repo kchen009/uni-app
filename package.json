@@ -12,16 +12,18 @@
     "unseed": "node_modules/.bin/sequelize db:seed:undo:all --config ./server/config/config.json --seeders-path ./server/seeders --migrations-path ./server/migrations --models-path ./server/--migrations-path ./server/migrations",
     "start": "nodemon --exec babel-node server/index.js",
     "build": "babel server --out-dir dist --copy-files",
-    "serve": "node dist/index.js"
+    "serve": "node dist/index.js",
+    "test": "jest"
   },
   "dependencies": {
     "apollo-datasource-rest": "^0.3.2",
-    "apollo-server": "^2.1.0",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-2": "^6.24.1",
+    "apollo-cache-inmemory": "^1.5.1",
+    "apollo-client": "^2.5.1",
+    "apollo-link-http": "^1.5.14",
+    "apollo-server": "^2.4.8",
+    "graphql": "^14.2.1",
+    "graphql-tag": "^2.10.1",
     "express": "^4.16.4",
-    "graphql": "^14.0.2",
     "graphql-tools": "^4.0.3",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
@@ -29,5 +31,21 @@
     "pg": "^7.4.3",
     "sequelize": ">=5.3.0",
     "sequelize-cli": "^5.4.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-transform-runtime": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/runtime": "^7.4.3",
+    "@types/jest": "^24.0.11",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "graphql-tester": "^0.0.5",
+    "jest": "^24.7.1",
+    "node-fetch": "^2.3.0"
   }
 }
