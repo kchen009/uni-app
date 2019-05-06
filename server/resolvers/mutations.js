@@ -65,7 +65,6 @@ export default {
 
   addCourseStudent: makeResolver(
     async (root, args, context, info) => {
-;
       const student = await context.db.User.findOne({
         where: { id: args.studentID }
       })
@@ -79,10 +78,34 @@ export default {
       const response = await context.db.StudentCourse.create({ courseId: args.courseID, userId: args.studentID });
       if (!response) {
         throw new ForbiddenError('Response failed - creating new studentcourse');
-      } 
+      }
       return course
     },
-    { roles: ['Faculty'], requireUser: false }
+    { roles: ['Faculty'] }
+  ),
+
+  deleteCourseStudent: makeResolver(
+    async (root, args, context, info) => {
+      const student = await context.db.User.findOne({
+        where: { id: args.studentID }
+      })
+      const course = await context.db.Course.findOne({
+        where: { id: args.courseID }
+      })
+      // if student or couse doesn't exist throw error
+      if (!course || !student) {
+        throw new ForbiddenError('Student or Course does not exist');
+      }
+      const response = await context.db.StudentCourse.destroy({
+        where: { courseId: args.courseID, userId: args.studentID }
+      });
+
+      if (!response) {
+        throw new ForbiddenError('Error - Student is not enrolled in this course')
+      }
+      return course
+    },
+    { roles: ['Faculty'] }
   ),
 
 };
