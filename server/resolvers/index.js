@@ -26,6 +26,7 @@ export default {
   },
   Course: {
     students: (course, args, { db }, info) => {
+      console.log('course', course);
       return course.getUsers();
     },
     professor: (course, args, { db }, info) => {

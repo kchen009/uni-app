@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { makeResolver } from '../Auth';
 import crypto from "crypto";
+import { ForbiddenError } from 'apollo-server';
 
 // Middleware function to authenticate and authorize the user
 // Takes a resolver function and returns an adorned resolver
@@ -42,5 +43,46 @@ export default {
       return context.users.update(id, user, context.db)
     },
     { roles: ['Admin'] }
-  )
+  ),
+
+  createCourse: makeResolver(
+    (root, args, context, info) => {
+      return context.db.Course.create({ name: args.name, userId: args.facultyID });
+    },
+    { roles: ['Faculty'] }
+  ),
+
+  deleteCourse: makeResolver(
+    async (root, args, context, info) => {
+      let response = await context.db.Course.destroy({
+        returning: true,
+        where: { id: args.courseID }
+      });
+      return (response === 1) ? true : false;
+    },
+    { roles: ['Faculty'] }
+  ),
+
+  addCourseStudent: makeResolver(
+    async (root, args, context, info) => {
+;
+      const student = await context.db.User.findOne({
+        where: { id: args.studentID }
+      })
+      const course = await context.db.Course.findOne({
+        where: { id: args.courseID }
+      })
+      // if student or couse doesn't exist throw error
+      if (!course || !student) {
+        throw new ForbiddenError('Student or Course does not exist');
+      }
+      const response = await context.db.StudentCourse.create({ courseId: args.courseID, userId: args.studentID });
+      if (!response) {
+        throw new ForbiddenError('Response failed - creating new studentcourse');
+      } 
+      return course
+    },
+    { roles: ['Faculty'], requireUser: false }
+  ),
+
 };

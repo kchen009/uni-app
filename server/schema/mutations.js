@@ -10,7 +10,7 @@ export default `
 
     # Only Faculty can create/update and manage courses
     createCourse(name: String!, facultyID: ID!): Course
-    deleteCourse(courseID: ID!): Course
+    deleteCourse(courseID: ID!): Boolean
     addCourseStudent(courseID: ID!, studentID: ID!): Course
     deleteCourseStudent(courseID: ID!, studentID: ID!): Course
 
