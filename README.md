@@ -119,6 +119,44 @@ mutation {
   }
 }
 ```
+create course (you must be a faculty member)
+```
+mutation {
+  createCourse(name: "Data Visualization", facultyID: 6) {
+    id
+    name
+    professor{
+      name
+    }
+  }
+}
+```
+create studentcourse (you must be a faculty member)
+```
+mutation {
+  addCourseStudent(courseID: 2, studentID: 4) {
+    id
+    name
+    students {
+      id
+      name
+    }
+  }
+}
+```
+delete studentcourse (you must be faculty member)
+```
+mutation {
+  deleteCourseStudent(courseID: 2, studentID: 2) {
+    id
+    name
+    students {
+      id
+      name
+    }
+  }
+}
+```
 
 
 #### created with GraphQL, Apollo, Node, Express, Sequelize starter
