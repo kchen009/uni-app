@@ -20,7 +20,7 @@ module.exports = {
         },
         {
           name: 'big-data',
-          userId: 5,
+          userId: 7,
           createdAt: now,
           updatedAt: now,
         },

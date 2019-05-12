@@ -7,16 +7,16 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch from 'node-fetch';
 
 // redefine as needed
-const SERVER_URI = 'http://localhost:4000/';
+const SERVER_URI = 'http://localhost:3000/';
 const badTokenError = 'GraphQL error: Bad Token';
 
-const ADMIN_EMAIL = 'admin@example.com';
+const ADMIN_EMAIL = 'john@demo.com';
 const ADMIN_PASSWORD = 'password';
 
-const STUDENT_EMAIL = 'one@example.com';
+const STUDENT_EMAIL = 'sally@demo.com';
 const STUDENT_PASSWORD = 'password';
 
-const FACULTY_EMAIL = 'prof@example.com';
+const FACULTY_EMAIL = 'scott@demo.com';
 const FACULTY_PASSWORD = 'password';
 
 const makeClient = ({ uri = SERVER_URI, token = null } = {}) => {

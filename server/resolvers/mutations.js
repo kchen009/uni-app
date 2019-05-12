@@ -52,6 +52,13 @@ export default {
     { roles: ['Faculty'] }
   ),
 
+  createAssignment: makeResolver(
+    (root, args, context, info) => {
+      return context.db.Assignment.create({ name: args.name, courseId: args.courseID });
+    },
+    { roles: ['Faculty'] }
+  ),
+
   deleteCourse: makeResolver(
     async (root, args, context, info) => {
       let response = await context.db.Course.destroy({
@@ -107,5 +114,6 @@ export default {
     },
     { roles: ['Faculty'] }
   ),
+
 
 };

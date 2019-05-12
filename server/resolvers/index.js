@@ -16,7 +16,7 @@ export default {
   },
   Faculty: {
     courses: (faculty, args, { db }, info) => {
-      console.log(faculty)
+      // console.log(faculty)
       return db.Course.findAll({
         where: {
           userId: faculty.dataValues.id
@@ -26,12 +26,17 @@ export default {
   },
   Course: {
     students: (course, args, { db }, info) => {
-      console.log('course', course);
+      // console.log('course', course);
       return course.getUsers();
     },
     professor: (course, args, { db }, info) => {
       return course.getUser();
-    }
+    },
+
+    assignments: (course, args, { db }, info) => {
+      return course.getAssignments();
+
+    },
   },
 
 };

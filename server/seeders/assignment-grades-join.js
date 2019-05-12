@@ -2,24 +2,27 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert("StudentCourses", [
+    return queryInterface.bulkInsert("AssignmentGrades", [
       {
         createdAt: new Date(),
         updatedAt: new Date(),
-        courseId: 1,
-        userId: 2
+        assignmentId: 1,
+        userId: 2,
+        grade: 100.0
       },
       {
         createdAt: new Date(),
         updatedAt: new Date(),
-        courseId: 2,
-        userId: 3
+        assignmentId: 2,
+        userId: 3,
+        grade: 100.0
       },
       {
         createdAt: new Date(),
         updatedAt: new Date(),
-        courseId: 3,
-        userId: 4
+        assignmentId: 3,
+        userId: 4,
+        grade: 100.0
       },
       
     ]);
