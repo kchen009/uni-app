@@ -1,2 +1,2 @@
-web: yarn serve
+web: yarn start
 webdev: yarn start
