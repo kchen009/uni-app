@@ -12,7 +12,10 @@ export default {
   Student: {
     courses: (student, args, { db }, info) => {
       return student.getCourses();
-    }
+    }, 
+    assignments: (student, args, { db }, info) => {
+      return student.getAssignments();
+    },
   },
   Faculty: {
     courses: (faculty, args, { db }, info) => {
@@ -38,5 +41,26 @@ export default {
 
     },
   },
+  AssignmentGrade: {
+    student: (assignmentgrade, args, { db }, info) => {
+      return db.User.findByPk(assignmentgrade.userId);
+    },
+
+    assignment: (assignmentgrade, args, { db }, info) => {
+      return db.Assignment.findByPk(assignmentgrade.assignmentId);
+    },
+  },
+  Assignment: {
+    grades: (assignment, args, {db}, info) => {
+      return db.AssignmentGrade.findAll({
+        where: {
+         assignmentId: assignment.id
+        }
+      })
+    },
+    course: (assignment, args, {db}, info) => {
+      return assignment.getCourse();
+    }
+  }
 
 };

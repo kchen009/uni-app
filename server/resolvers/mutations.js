@@ -59,6 +59,28 @@ export default {
     { roles: ['Faculty'] }
   ),
 
+  createAssignmentGrade: makeResolver(
+    async (root, args, context, info) => {
+      const student = await context.db.User.findOne({
+        where: { id: args.studentID }
+      })
+      const assignment = await context.db.Assignment.findOne({
+        where: { id: args.assignmentID }
+      })
+      // if student or assigment doesn't exist throw error
+      if (!assignment || !student) {
+        throw new ForbiddenError('Student or Assignment does not exist');
+      }
+      const response = await context.db.AssignmentGrade.create({ assignmentId: args.assignmentID, userId: args.studentID,
+       grade: args.grade});
+      if (!response) {
+        throw new ForbiddenError('Response failed - creating new assignmentgrade');
+      }
+      return response
+    },
+    { roles: ['Faculty'] }
+  ),
+
   deleteCourse: makeResolver(
     async (root, args, context, info) => {
       let response = await context.db.Course.destroy({

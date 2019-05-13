@@ -8,14 +8,14 @@ export default {
     {roles: ['Admin'] },
   ),
 
-  students: makeResolver((parent, args, context, info) => {
+  students: (parent, args, context, info) => {
     return context.db.User.findAll({
       where: {
         role: 'Student'
       }
     })
   },
-  ),
+  
   faculty: (parent, args, context, info) => {
     return context.db.User.findAll({
       where: {
