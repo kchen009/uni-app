@@ -157,6 +157,31 @@ mutation {
   }
 }
 ```
+create assignment
+```
+mutation {
+  createAssignment(courseID: 3, name: "homework1") {
+    id
+    name
+  }
+}
+```
+
+Create assignmentGrade
+```
+mutation {
+  createAssignmentGrade(assignmentID: 8, studentID: 2, grade: 99.0) {
+    id
+    assignment {
+      name
+    }
+    student {
+      name
+    }
+    grade
+  }
+}
+```
 
 
 #### created with GraphQL, Apollo, Node, Express, Sequelize starter
