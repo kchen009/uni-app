@@ -12,7 +12,7 @@ import {
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
-  // including in our context header requests, db, users, userSessions },
+  // including in our context: requests, db, users, userSessions },
   context: request => {
     return {
       db, userSessions, users, request

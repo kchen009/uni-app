@@ -18,6 +18,7 @@ import { ForbiddenError } from 'apollo-server';
 export default {
   loginUser: makeResolver(
     (root, args, context, info) => {
+      //context.users.login, method from the Users class
       return context.users.login(args.email, args.password, { db: context.db });
     },
     { requireUser: false },

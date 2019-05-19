@@ -194,4 +194,4 @@ mutation {
 ```
 
 
-#### created with GraphQL, Apollo, Node, Express, Sequelize starter
+#### created with GraphQL, Apollo, Node, Express, [dse-i2400-project-template](https://github.com/makeitnew/dse-i2400-project-template), [GraphQL-Appollo-Sequelize-starter](https://github.com/andrecalvo/GraphQL-Apollo-Node-Express-Postgres-Sequelize-starter)

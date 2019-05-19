@@ -9,6 +9,7 @@ export default {
   User: {
     __resolveType: (user, context, info) => user.role,
   },
+  //these are data that can be returned for each students
   Student: {
     courses: (student, args, { db }, info) => {
       return student.getCourses();
