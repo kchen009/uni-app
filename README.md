@@ -12,10 +12,10 @@ configure your /server/config/config.json
 `yarn setup` - This runs 3 other comamnds in the package.json which
 
 - Creates a new Postgres database (Postgres must be runnning locally for this to work. The configuration/credentials can be set in the `server/config/config.json` file.).
-- Runs migrations to create tables for Locations, Categories and their join table.
+- Runs migrations to create tables for User, Course, Assignment, and their join tables.
 - Runs seeds to populate these tables for demo purposes.
 
-`yarn start` - Runs your express server which servers your graphql playground at [http://localhost:4000/graphql](http://localhost:4000/graphql)
+`yarn start` - Runs your express server which servers your graphql playground at [http://localhost:3000/graphql](http://localhost:3000/graphql)
 
 `yarn test` - Runs the test suite, must have server running first.
 
