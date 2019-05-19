@@ -5,7 +5,7 @@ export default {
   users: makeResolver((parent, args, context, info) => {
     return context.db.User.findAll();
   },
-    {roles: ['Admin'] },
+    { roles: ['Admin'] },
   ),
 
   students: (parent, args, context, info) => {
@@ -15,13 +15,16 @@ export default {
       }
     })
   },
-  
+
   faculty: (parent, args, context, info) => {
     return context.db.User.findAll({
       where: {
         role: 'Faculty'
       }
     })
-  }
+  },
+  currentUser: makeResolver((parent, args, context, info) => {
+    return context.user;
+  })
 
 };

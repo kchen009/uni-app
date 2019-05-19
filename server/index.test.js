@@ -9,6 +9,7 @@ import fetch from 'node-fetch';
 // redefine as needed
 const SERVER_URI = 'http://localhost:3000/';
 const badTokenError = 'GraphQL error: Bad Token';
+const notAuthorizedUser = 'GraphQL error: Operation Not Permitted';
 
 const ADMIN_EMAIL = 'john@demo.com';
 const ADMIN_PASSWORD = 'password';
@@ -117,6 +118,26 @@ const listStudents = async (client) => {
   return result.data;
 };
 
+//List Facutly query
+const listFaculty = async (client) => {
+  const q = gql`
+    query {
+      faculty {
+        id
+        name
+        email
+        role
+        courses {
+          id
+          name
+        }
+      }
+    }
+  `;
+  const result = await client.query({ query: q });
+  return result.data;
+};
+
 const getCurrentUser = async (client) => {
   const q = gql`
     query {
@@ -157,19 +178,106 @@ const createUser = async (client, {
   return result.data.createUser;
 };
 
+//create course mutation
+const createCourse = async (client, {
+  name = '', facultyID = null,
+}) => {
+  const m = gql`
+    mutation createCourse($name: String!, $facultyID: ID!) {
+      createCourse(name: $name, facultyID: $facultyID) {
+        id
+        name
+      }
+    }
+  `;
+  const result = await client.mutate({
+    mutation: m,
+    variables: {
+      name,
+      facultyID,
+    },
+  });
+  return result.data.createCourse;
+};
+
+//delete course mutation
+const deleteCourse = async (client, {
+  courseID = null,
+}) => {
+  const m = gql`
+    mutation deleteCourse($courseID: ID!) {
+      deleteCourse(courseID: $courseID)
+    }
+  `;
+  const result = await client.mutate({
+    mutation: m,
+    variables: {
+      courseID,
+    },
+  });
+  return result.data.deleteCourse;
+};
+
+//create assignment mutation
+const createAssignment = async (client, {
+  name = '', courseID = null,
+}) => {
+  const m = gql`
+    mutation createAssignment($name: String!, $courseID: ID!) {
+      createAssignment(name: $name, courseID: $courseID) {
+        id
+        name
+      }
+    }
+  `;
+  const result = await client.mutate({
+    mutation: m,
+    variables: {
+      name,
+      courseID,
+    },
+  });
+
+  return result.data.createAssignment;
+};
+
+//create assignmentGrade mutation
+const createAssignmentGrade = async (client, {
+  grade = null, assignmentID = null, studentID = null
+}) => {
+  const m = gql`
+    mutation createAssignmentGrade($grade: Float!, $assignmentID: ID!, $studentID: ID!) {
+      createAssignmentGrade(grade: $grade, assignmentID: $assignmentID, studentID: $studentID ) {
+        id
+        grade
+      }
+    }
+  `;
+  const result = await client.mutate({
+    mutation: m,
+    variables: {
+      grade,
+      assignmentID,
+      studentID
+    },
+  });
+
+  return result.data.createAssignmentGrade;
+};
+
 // can the server say hello?
-describe('Hello Tests', () => {
-  let client;
+// describe('Hello Tests', () => {
+//   let client;
 
-  beforeAll(() => {
-    client = makeClient();
-  });
+//   beforeAll(() => {
+//     client = makeClient();
+//   });
 
-  it('should say hello', async () => {
-    const r = await sayHello(client);
-    expect(r).toEqual({ hello: 'world' });
-  });
-});
+//   it('should say hello', async () => {
+//     const r = await sayHello(client);
+//     expect(r).toEqual({ hello: 'world' });
+//   });
+// });
 
 describe('Login Tests', () => {
   let client;
@@ -285,7 +393,18 @@ describe('List Users', () => {
     }
   });
 
-  it.todo('should list faculty');
+  //create faculty list test
+  it('should list faculty', async () => {
+    const result = await listFaculty(client);
+    expect(result.faculty.length).toBeGreaterThan(0);
+    const { faculty } = result;
+    const s = faculty[0];
+
+    for (const attr of ['id', 'email', 'role', 'name']) {
+      expect(s[attr]).toBeDefined();
+    }
+  });
+
 
   it.todo('should get a single user');
 
@@ -299,15 +418,31 @@ describe('User Creation', () => {
   });
 
   it('should create a user', async () => {
+    // generate unique email each time the test gets
+    const uniqueEmail = 'user' + Math.floor(Math.random() * 10000) + '@demo.com';
     const result = await createUser(client, {
       name: 'new user name',
-      email: 'newuser@example.com',
+      email: uniqueEmail,
       password: 'new-user-password',
     });
     expect(result.id).toBeDefined();
   });
 
-  it.todo('should validate user email format');
+  //create validate user email test
+  it('should validate user email format', async () => {
+    const uniqueNum = Math.floor(Math.random() * 10000);
+    const badEmail = 'new-user' + uniqueNum;
+    try {
+      const result = await createUser(client, {
+        name: 'new user name',
+        email: badEmail,
+        password: 'new-user-password',
+      });
+      expect(result).not.toBeDefined();
+    } catch (e) {
+      expect(e.message).toEqual('GraphQL error: Invalid Email Format');
+    }
+  });
 });
 
 describe('Course Operations', () => {
@@ -316,8 +451,16 @@ describe('Course Operations', () => {
     client = await loginFaculty();
   });
 
-  it.todo('should create a course');
+  //create a course test
+  it('should create a course', async () => {
+    const result = await createCourse(client, {
+      name: 'new course',
+      facultyID: 5
+    });
+    expect(result.id).toBeDefined();
+  })
 });
+
 
 describe('Assignment Operations', () => {
   let client;
@@ -325,8 +468,26 @@ describe('Assignment Operations', () => {
     client = await loginFaculty();
   });
 
-  it.todo('should create an assignment by faculty');
-  it.todo('should assign a student a grade for an assignment');
+  // it.todo('should create an assignment by faculty');
+  it('should create an assignment by faculty', async () => {
+    const result = await createAssignment(client, {
+      name: 'new assignment',
+      courseID: 5
+    });
+    expect(result.id).toBeDefined();
+  })
+
+
+  it('should assign a student a grade for an assignment', async () => {
+    const result = await createAssignmentGrade(client, {
+      grade: 91.6,
+      assignmentID: 1,
+      studentID: 2
+    });
+    expect(result.id).toBeDefined();
+  })
+
+
 });
 
 describe('Enforce student authorizations', () => {
@@ -344,15 +505,65 @@ describe('Enforce student authorizations', () => {
         password: 'new_password',
       });
     } catch (e) {
-      expect(e.message).toEqual('GraphQL error: Operation Not Permitted');
+      expect(e.message).toEqual(notAuthorizedUser);
     }
   });
 
-  it.todo('should not let student create a course');
+  // should let let user create a course
+  it('should not let student create a course', async () => {
+    expect.assertions(1);
+    try {
+      await createCourse(client, {
+        name: 'new course',
+        facultyID: 5
+      });
+    } catch (e) {
+      expect(e.message).toEqual(notAuthorizedUser);
+    }
+  });
+
   it.todo('should not let student update a course');
-  it.todo('should not let students delete a course');
-  it.todo('should not let students create an assignment');
-  it.todo('should not let students assign a grade');
+
+  // it.todo('should not let students delete a course');
+  it('should not let students delete a course', async () => {
+    expect.assertions(1);
+    try {
+      await deleteCourse(client, {
+        courseID: 1,
+      });
+    } catch (e) {
+      expect(e.message).toEqual(notAuthorizedUser);
+    }
+  });
+
+  // it.todo('should not let students create an assignment');
+  it('should not let students create an assignment', async () => {
+    expect.assertions(1);
+    try {
+      await createAssignment(client, {
+        name: 'new assignment',
+        courseID: 5
+      });
+    } catch (e) {
+      expect(e.message).toEqual(notAuthorizedUser);
+    }
+  });
+
+
+  // it.todo('should not let students assign a grade');
+  it('should not let students assign a grade', async () => {
+    expect.assertions(1);
+    try {
+      await createAssignmentGrade(client, {
+        grade: 91.6,
+        assignmentID: 1,
+        studentID: 2
+      });
+    } catch (e) {
+      expect(e.message).toEqual(notAuthorizedUser);
+    }
+  });
+
 });
 
 describe('Enforce faculty authorization', () => {
@@ -370,7 +581,7 @@ describe('Enforce faculty authorization', () => {
         password: 'new_password',
       });
     } catch (e) {
-      expect(e.message).toEqual('GraphQL error: Operation Not Permitted');
+      expect(e.message).toEqual(notAuthorizedUser);
     }
   });
 

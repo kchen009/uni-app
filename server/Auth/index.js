@@ -58,7 +58,7 @@ class Users {
 
         // if user not found
         if (!response) {
-            throw new AuthenticationError('User not Found');
+            throw new AuthenticationError('Bad Login or Password');
         }
 
         // return response;
@@ -85,8 +85,13 @@ class Users {
 
 
     create = async (user, db) => {
+        // validate email format - https://www.w3resource.com/javascript/form/email-validation.php
+        const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (!user.email.match(mailformat)) {
+            throw new UserInputError('Invalid Email Format');
+        }  
 
-        // looks for user
+        // looks for user inside existing db
         let response = await db.User.findOne({ where: { email: user.email } });
         // throw if email already exists
         if (response) {

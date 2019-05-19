@@ -17,6 +17,8 @@ configure your /server/config/config.json
 
 `yarn start` - Runs your express server which servers your graphql playground at [http://localhost:4000/graphql](http://localhost:4000/graphql)
 
+`yarn test` - Runs the test suite, must have server running first.
+
 ## Example queries and mutations
 
 Mutation to login user. Logging in returns a token which you need to add into the http header of query/mutation in the apollo playground. 
@@ -90,7 +92,15 @@ query {
 }
 
 ```
+```
+query {
+  currentUser {
+    id
+    name
+  }
+}
 
+```
 
 
 ## Mutation 
