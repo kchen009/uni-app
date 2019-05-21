@@ -2,10 +2,12 @@ import { makeResolver } from "../Auth";
 
 export default {
 
-  users: (parent, args, context, info) => {
+  users: makeResolver((parent, args, context, info) => {
+
     return context.db.User.findAll();
   },
-    // { roles: ['Admin'] },
+    { roles: ['Admin'] },
+  ),
 
   students: (parent, args, context, info) => {
     if (args.id) {
