@@ -112,7 +112,7 @@ mutation{
 }
 ```
 
-create user
+create user (you must be an admin)
 ```
 mutation {
   createUser(
@@ -126,6 +126,24 @@ mutation {
     id
     name
     email
+  }
+}
+```
+update user (you must be an admin)
+```
+mutation {
+  updateUser(
+    id: 8
+    user: {
+      name: "Cara"
+      email: "cara@demo.com"
+      role: Student
+      password: "password"
+    }
+  ) {
+    id
+    name
+    role
   }
 }
 ```
@@ -167,7 +185,7 @@ mutation {
   }
 }
 ```
-create assignment
+create assignment (you must be a faculty)
 ```
 mutation {
   createAssignment(courseID: 3, name: "homework1") {
@@ -177,7 +195,7 @@ mutation {
 }
 ```
 
-Create assignmentGrade
+Create assignmentGrade (you must be a faculty)
 ```
 mutation {
   createAssignmentGrade(assignmentID: 8, studentID: 2, grade: 99.0) {

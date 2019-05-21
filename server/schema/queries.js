@@ -2,7 +2,7 @@ import types from "./types";
 export default `
   type Query {
     users: [User!],
-    students(id: Int): [Student],
+    students(id: ID): [Student],
     faculty: [Faculty],
     currentUser: User,
   }

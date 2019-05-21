@@ -264,7 +264,7 @@ const createAssignmentGrade = async (client, {
 
   return result.data.createAssignmentGrade;
 };
-
+// Leaveing this test out since it wasn't part of our web app. 
 // can the server say hello?
 // describe('Hello Tests', () => {
 //   let client;
@@ -405,7 +405,7 @@ describe('List Users', () => {
     }
   });
 
-
+  //would require additional queries to test, prof said we can leave out.
   it.todo('should get a single user');
 
   it.todo('should get a student');
@@ -509,7 +509,7 @@ describe('Enforce student authorizations', () => {
     }
   });
 
-  // should let let user create a course
+  // should not let user create a course
   it('should not let student create a course', async () => {
     expect.assertions(1);
     try {
@@ -584,7 +584,8 @@ describe('Enforce faculty authorization', () => {
       expect(e.message).toEqual(notAuthorizedUser);
     }
   });
-
+  //These operations are only allowed by faculty (see resolver for createCourse and deleteCourse)
+  //and are tested by the student tests above. 
   it.todo('should not let faculty create a course');
   it.todo('should not let faculty delete a course');
 });
