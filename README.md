@@ -51,6 +51,7 @@ query {
   users {
     id
     name
+    email
     role
   }
 }
@@ -62,30 +63,35 @@ query {
   students {
     id
     name
+    email
+    role
     courses {
-      id
       name
-      professor {
-        id
-        name
+    }
+    assignments {
+      name
+      grades {
+        grade
       }
     }
   }
 }
-
 ```
 
 ```
 query {
-  faculty {
+  students {
     id
     name
+    email
+    role
     courses {
-      id
       name
-      students {
-        id
-        name
+    }
+    assignments {
+      name
+      grades {
+        grade
       }
     }
   }
@@ -117,8 +123,8 @@ create user (you must be an admin)
 mutation {
   createUser(
     user: {
-      name: "joe"
-      email: "joe@demo.com"
+      name: "Cara"
+      email: "cara@demo.com"
       role: Student
       password: "password"
     }
@@ -135,14 +141,15 @@ mutation {
   updateUser(
     id: 8
     user: {
-      name: "Cara"
-      email: "cara@demo.com"
+      name: "Kara"
+      email: "kara@demo.com"
       role: Student
       password: "password"
     }
   ) {
     id
     name
+    email
     role
   }
 }
@@ -162,7 +169,7 @@ mutation {
 create studentcourse (you must be a faculty member)
 ```
 mutation {
-  addCourseStudent(courseID: 2, studentID: 4) {
+  addCourseStudent(courseID: 4, studentID: 4) {
     id
     name
     students {
@@ -175,7 +182,7 @@ mutation {
 delete studentcourse (you must be faculty member)
 ```
 mutation {
-  deleteCourseStudent(courseID: 2, studentID: 2) {
+  deleteCourseStudent(courseID: 4, studentID: 4) {
     id
     name
     students {
@@ -188,7 +195,7 @@ mutation {
 create assignment (you must be a faculty)
 ```
 mutation {
-  createAssignment(courseID: 3, name: "homework1") {
+  createAssignment(courseID: 4, name: "homework1") {
     id
     name
   }
@@ -198,7 +205,7 @@ mutation {
 Create assignmentGrade (you must be a faculty)
 ```
 mutation {
-  createAssignmentGrade(assignmentID: 8, studentID: 2, grade: 99.0) {
+  createAssignmentGrade(assignmentID: 1, studentID: 2, grade: 99.0) {
     id
     assignment {
       name
