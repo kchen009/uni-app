@@ -406,9 +406,9 @@ describe('List Users', () => {
   });
 
   //would require additional queries to test, prof said we can leave out.
-  it.todo('should get a single user');
+  it.todo('should get a single user (see my comment)');
 
-  it.todo('should get a student');
+  it.todo('should get a student (see my comment)');
 });
 
 describe('User Creation', () => {
@@ -522,7 +522,9 @@ describe('Enforce student authorizations', () => {
     }
   });
 
-  it.todo('should not let student update a course');
+  // This wasn't part of the operations in original schema (updateCourse), 
+  // per our discussion I am omitting.
+  it.todo('should not let student update a course (see my comment)');
 
   // it.todo('should not let students delete a course');
   it('should not let students delete a course', async () => {
@@ -586,6 +588,6 @@ describe('Enforce faculty authorization', () => {
   });
   //These operations are only allowed by faculty (see resolver for createCourse and deleteCourse)
   //and are tested by the student tests above. 
-  it.todo('should not let faculty create a course');
-  it.todo('should not let faculty delete a course');
+  it.todo('should not let faculty create a course (see my comment)');
+  it.todo('should not let faculty delete a course (see my comment)');
 });
