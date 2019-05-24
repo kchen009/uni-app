@@ -46,7 +46,7 @@ This token will be used to identify/validate the user.  In the graphql playgroun
 On the web client, the token can be cached and included in all future api request to the server so the backend can identify the user.
 
 ## Queries
-
+users (you must be an admin)
 ```
 query {
   users {
@@ -58,7 +58,7 @@ query {
 }
 
 ```
-
+students
 ```
 query {
   students {
@@ -78,10 +78,10 @@ query {
   }
 }
 ```
-
+faculty
 ```
 query {
-  students {
+  faculty {
     id
     name
     email
@@ -89,16 +89,12 @@ query {
     courses {
       name
     }
-    assignments {
-      name
-      grades {
-        grade
-      }
-    }
   }
 }
 
+
 ```
+currentuser (you must be logged in)
 ```
 query {
   currentUser {
