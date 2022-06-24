@@ -46,6 +46,6 @@
     "eslint-plugin-import": "^2.17.2",
     "graphql-tester": "^0.0.5",
     "jest": "^24.7.1",
-    "node-fetch": "^2.3.0"
+    "node-fetch": "^2.6.7"
   }
 }
